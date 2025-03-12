@@ -8,7 +8,7 @@ export default function Splash(props) {
 
         setTimeout(() => {
             // redirecionar o usuário para a tela home
-            props.navigation.navigate("home");
+            props.navigation.navigate("main", { screen: "home" });
         }, 3000);
 
     }

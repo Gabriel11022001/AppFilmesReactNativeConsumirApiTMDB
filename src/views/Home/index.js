@@ -62,6 +62,7 @@ export default function Home(props) {
 
     // redirecionar para a tela contendo os detalhes do filme em questão
     const visualizarFilme = (idFilmeVisualizar) => {
+        console.log("Visualizar o filme de id: " + idFilmeVisualizar);
         props.navigation.navigate("detalhes_filme", { idFilme: idFilmeVisualizar });
     }
 

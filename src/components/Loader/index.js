@@ -15,7 +15,7 @@ const estilosLoader = StyleSheet.create({
     loader: {
         width: "100%",
         height: "100%",
-        backgroundColor: cores.preto,
+        backgroundColor: cores.corFundo,
         position: "absolute",
         top: 0,
         bottom: 0,
