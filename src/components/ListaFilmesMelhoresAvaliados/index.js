@@ -22,16 +22,19 @@ export default function ListaFilmesMelhoresAvaliados({ filmesMelhoresAvaliados, 
         style={ estilosListaFilmesMelhoresAvaliados.listaFilmesMelhoresAvaliados } 
         data={ filmesApresentar }
         renderItem={ ({ item }) => (
-            <TouchableOpacity style={ estilosListaFilmesMelhoresAvaliados.filmeMelhorVotadoItem } onPress={ () => {
-                onVisualizarDetalhesFilme(item.id);
-            } }>
-                <Image
-                    style={ estilosListaFilmesMelhoresAvaliados.estiloBanner } 
-                    source={ {
-                        uri: "https://image.tmdb.org/t/p/original" + item.banner
-                    } }
-                    resizeMode="cover" />
-                <Text style={ estilosListaFilmesMelhoresAvaliados.posicaoFilmeTexto }>{ item.posicaoOrdem }</Text>
+            <TouchableOpacity
+                style={ estilosListaFilmesMelhoresAvaliados.filmeMelhorVotadoItem }
+                onPress={ () => {
+                    onVisualizarDetalhesFilme(item.id);
+                } }
+                key={ item.id }>
+                    <Image
+                        style={ estilosListaFilmesMelhoresAvaliados.estiloBanner } 
+                        source={ {
+                            uri: "https://image.tmdb.org/t/p/original" + item.banner
+                        } }
+                        resizeMode="cover" />
+                    <Text style={ estilosListaFilmesMelhoresAvaliados.posicaoFilmeTexto }>{ item.posicaoOrdem }</Text>
             </TouchableOpacity>
         ) } />
 }
@@ -43,7 +46,8 @@ const estilosListaFilmesMelhoresAvaliados = StyleSheet.create({
         marginTop: 30,
         marginStart: 25,
         marginEnd: 25,
-        borderRadius: 30
+        borderRadius: 30,
+        marginBottom: 40
     },
     estiloBanner: {
         width: "100%",
