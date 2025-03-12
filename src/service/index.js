@@ -18,3 +18,13 @@ export const consultarFilmesService = async () => {
 export const consultarFilmePeloIdService = async (idFilme) => {
     
 }
+
+// consultar os filmes melhores votados
+export const consultarFilmesMelhoresVotadosService = async () => {
+
+    return await axios.get("https://api.themoviedb.org/3/movie/top_rated?language=pt-BR&page=1", {
+        headers: {
+            Authorization: "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwN2ZhMjE3ZGIyYzVjZmJlZGVhMTQ1ZGYxZDA5OTcyNSIsIm5iZiI6MTczMjM4MTYxOC40MDksInN1YiI6IjY3NDIwYmIyYWMyN2Y1MTZkOWYzNTE2YiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.I7y8ALFa8kmaeN0E4yfMNedfKF_NPwh507RpyrFMAxA"
+        }
+    });
+}

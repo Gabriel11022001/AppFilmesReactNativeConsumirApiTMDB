@@ -12,15 +12,8 @@ export default function Navegacao() {
                 initialRouteName="splash_screen" >
                 { rotas.map((rota) => {
 
-                    if (rota.nome == "splash_screen") {
-
-                        return <Stack.Screen name={ rota.nome } component={ rota.componente } key={ rota.nome } options={ {
-                            headerShown: false
-                        } } />
-                    }
-
                     return <Stack.Screen name={ rota.nome } component={ rota.componente } key={ rota.nome } options={ {
-                        title: rota.titulo
+                        headerShown: false
                     } } />
                 }) } 
             </Stack.Navigator>

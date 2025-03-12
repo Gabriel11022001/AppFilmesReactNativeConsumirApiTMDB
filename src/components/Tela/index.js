@@ -10,7 +10,7 @@ export default function Tela(props) {
 
 const estilosTela = StyleSheet.create({
     tela: {
-        backgroundColor: cores.preto,
+        backgroundColor: cores.corFundo,
         height: "100%",
         width: "100%"
     }

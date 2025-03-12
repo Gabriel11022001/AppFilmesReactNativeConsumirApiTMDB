@@ -2,73 +2,57 @@ import { FlatList, SafeAreaView, StyleSheet, Text } from "react-native";
 import Tela from "../../components/Tela";
 import cores from "../../cores";
 import { useEffect, useState } from "react";
-import { consultarFilmesService } from "../../service";
+import { consultarFilmesMelhoresVotadosService, consultarFilmesService } from "../../service";
 import Loader from "../../components/Loader";
 import FilmeItem from "../../components/FilmeItem";
+import ListaFilmesMelhoresAvaliados from "../../components/ListaFilmesMelhoresAvaliados";
 
 export default function Home(props) {
 
     const [ apresentarLoader, setApresentarLoader ] = useState(false);
     const [ filmes, setFilmes ] = useState([]);
+    const [ filmesMelhoresVotados, setFilmesMelhoresVotados ] = useState([]); 
 
-    // consultar filmes no servidor
-    const consultarFilmes = async () => {
-        console.log("Consultando os filmes no servidor...");
+    // consultar os filmes que foram melhores votados
+    const consultarFilmesMelhoresVotados = async () => {
+        console.log("Consultando os filmes melhores avaliados...");
+
         setApresentarLoader(true);
-        setFilmes([])
 
         try {
-            const respConsultarFilmes = await consultarFilmesService();
+            const resp = await consultarFilmesMelhoresVotadosService();
+            
+            if (resp.status == 200) {
+                setFilmesMelhoresVotados(obterListagemFilmes(resp.data.results));
 
-            setApresentarLoader(false);
-
-            if (respConsultarFilmes.status == 200) {
-                const filmesSemFormatar = respConsultarFilmes.data.results;
-                const filmesFormatados = [];
-
-                for (let contadorFilmes = 0; contadorFilmes < filmesSemFormatar.length; contadorFilmes++) {
-                    const filme = {
-                        id: filmesSemFormatar[ contadorFilmes ].id,
-                        titulo: filmesSemFormatar[ contadorFilmes ].title,
-                        imagemFundo: filmesSemFormatar[ contadorFilmes ].backdrop_path,
-                        nota: filmesSemFormatar[ contadorFilmes ].vote_average,
-                        poster: filmesSemFormatar[ contadorFilmes ].poster_path,
-                        dataLancamento: filmesSemFormatar[ contadorFilmes ].release_date
-                    };
-
-                    filmesFormatados.push(filme);
-                }
-                
-                setFilmes(filmesFormatados);
+                setApresentarLoader(false);
+            } else {
+                // apresentar alerta de erro
+                setApresentarLoader(false);
             }
 
         } catch (e) {
-            console.log("Erro: " + e);
             setApresentarLoader(false);
+            // apresentar alerta de erro
+            console.log("Erro consultar melhores votados: " + e);
         }
 
     }
 
-    const listarFilmes = () => {
+    const obterListagemFilmes = (filmesArray) => {
 
-        if (filmes.length == 0) {
+        return filmesArray.map((filme) => {
 
-            return <Text>Não existem filmes cadastrados.</Text>
-        }
-        
-        return <FlatList
-            data={ filmes }
-            renderItem={ ({ item }) => {
-
-                return <FilmeItem
-                    titulo={ item.titulo }
-                    banner={ item.poster }
-                    descricao={ "" }
-                    key={ item.id }
-                    onVisualizarFilme={ () => {
-                        visualizarFilme(item.id);
-                    } } />
-            } } />
+            return {
+                id: filme.id,
+                banner: filme.poster_path,
+                titulo: filme.title,
+                bannerFundo: filme.backdrop_path,
+                descricao: filme.overview,
+                dataLancamento: filme.release_date,
+                nota: filme.vote_average
+            };
+        });
     }
 
     // redirecionar para a tela contendo os detalhes do filme em questão
@@ -77,14 +61,19 @@ export default function Home(props) {
     }
 
     useEffect(() => {
-        consultarFilmes();
+        consultarFilmesMelhoresVotados();
     }, []);
 
     return (
         <Tela>
             { apresentarLoader ? <Loader mensagem="Consultando filmes, aguarde..." /> : false }
-            <Text style={ estilosHome.titulo }>Seja bem vindo.</Text>
-            { listarFilmes() }
+            <Text style={ estilosHome.titulo }>What do you want to watch?</Text>
+            { /** lista com os filmes que possuem as melhores avaliações */ }
+            <ListaFilmesMelhoresAvaliados
+                filmesMelhoresAvaliados={ filmesMelhoresVotados }
+                onVisualizarDetalhesFilme={ (idFilmeVisualizar) => {
+                    visualizarFilme(idFilmeVisualizar);
+                } } />
         </Tela>
     );
 }
@@ -93,7 +82,8 @@ const estilosHome = StyleSheet.create({
     titulo: {
         color: cores.branco,
         fontWeight: "bold",
-        fontSize: 30,
-        margin: 20
+        fontSize: 18,
+        marginStart: 20,
+        marginTop: 50
     }
 });
